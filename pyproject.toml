@@ -12,6 +12,7 @@ python-dotenv = "^1.0.0"
 chromadb = "^0.5.0"
 llama-index = "^0.10.39"
 deepeval = "^0.21.45"
+llama-index-readers-web = "^0.1.17"
 
 
 [tool.poetry.group.dev.dependencies]
