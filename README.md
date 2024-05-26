@@ -7,20 +7,20 @@
     - If your system throws errors here, you could try deleting the poetry.lock file and installing different versions of the required packages.
 3. You can then run the Fast API server through the following command: `poetry run python app.py`.
     - Once up and running, head to `0.0.0.0:8000/docs` (or sometimes required: `localhost:8000/docs`) and explore the endpoints!
-4. Alternatively you can run __main__.py to run a single instance run of various parts of the code.
+4. Alternatively you can run __main__.py via `poetry run python __main__.py` to run a single instance run of various parts of the code.
 
-*Note: editing or saving any file will cause the fastAPI server to restart. This is very slow (be patient) as it has to reload the vectorstore from scratch each time.*
+*Note: editing or saving any file will cause the fastAPI server to restart. This is very slow (be patient) as it has to reload both brains from scratch each time.*
 
 ## Objectives
 
 - Create at least 2 retrieval frameworks.
-- Create at least 2 generation frameworks
+- Create at least 2 generation frameworks.
 - Create at least 2 evaluation frameworks and compare the two pipelines.
 
 ## Goals
 
 - Get it working
-- Atomise each retrieval, generation and evaluation object.
+- Atomise each retrieval, generation and evaluation object
 - Use interfaces to enable each object to be swapable for another without the pipeline needing to know the specific implementation
 - Use factory patterns to separate instantiation and use
 

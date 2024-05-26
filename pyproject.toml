@@ -29,4 +29,4 @@ requires = ["poetry-core"]
 build-backend = "poetry.core.masonry.api"
 
 [tool.poetry.scripts]
-gentlemen = { callable = "relevance_pipeline.__main__:main"}
+run_relevance_pipeline = { callable = "relevance_pipeline.__main__:main"}
