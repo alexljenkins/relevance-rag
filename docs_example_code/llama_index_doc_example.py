@@ -1,4 +1,4 @@
-# code found: https://docs.llamaindex.ai/en/stable/module_guides/evaluating/usage_pattern/?h=deepevalanswerrelevancyevaluator#deepeval
+# code 1:1 copy from: https://docs.llamaindex.ai/en/stable/module_guides/evaluating/usage_pattern/?h=deepevalanswerrelevancyevaluator#deepeval
 from dotenv import load_dotenv
 
 from llama_index.core import VectorStoreIndex, SimpleDirectoryReader
@@ -7,18 +7,18 @@ from deepeval.integrations.llama_index import DeepEvalAnswerRelevancyEvaluator
 
 
 load_dotenv()
-# documents = SimpleDirectoryReader("data").load_data()
-documents = SimpleWebPageReader(html_to_text=True).load_data([
-    "https://www.nrma.com.au/sites/nrma/files/nrma/policy_booklets/nrma-car-pds-1023-east.pdf",
-    "https://www.allianz.com.au/openCurrentPolicyDocument/POL011BA/$File/POL011BA.pdf"
-])
+documents = SimpleDirectoryReader("data").load_data()
+# documents = SimpleWebPageReader(html_to_text=True).load_data([
+#     "https://www.nrma.com.au/sites/nrma/files/nrma/policy_booklets/nrma-car-pds-1023-east.pdf",
+#     "https://www.allianz.com.au/openCurrentPolicyDocument/POL011BA/$File/POL011BA.pdf"
+# ])
 
 index = VectorStoreIndex.from_documents(documents)
 rag_application = index.as_query_engine()
 
 # An example input to your RAG application
-user_input = "What is the policy number for the Allianz policy?"
-
+# user_input = "What is the policy number for the Allianz policy?"
+user_input = "I have Third Party Fire & Theft insurance under the allianz policy. What is the most they will repay me for my car?"
 # LlamaIndex returns a response object that contains
 # both the output string and retrieved nodes
 response_object = rag_application.query(user_input)
