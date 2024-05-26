@@ -1,7 +1,9 @@
 import logging
+import random
 
 from dotenv import load_dotenv
 
+from api.api_dataclasses import GeneratorOptionEnum
 from relevance_pipeline.utils.rag_pipelines import get_all_evaluators, get_gpt_inmemory_store
 from relevance_pipeline.query_ai.open_ai_gpt import create_openai_answer_engine, convert_context_nodes_to_context_model
 
@@ -17,7 +19,7 @@ def main():
     context_nodes = store.retrieve_from_knowledge_store(question)
     context_model = convert_context_nodes_to_context_model(context_nodes)
 
-    openai_generator = create_openai_answer_engine()
+    openai_generator = create_openai_answer_engine(random.choice(list(GeneratorOptionEnum)))
     answer_model = openai_generator.answer_question_with_context(question, context_model)
 
     evaluators = get_all_evaluators()
