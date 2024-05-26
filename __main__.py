@@ -4,7 +4,7 @@ import random
 from dotenv import load_dotenv
 
 from api.api_dataclasses import GeneratorOptionEnum
-from relevance_pipeline.utils.rag_pipelines import get_all_evaluators, get_gpt_inmemory_store
+from relevance_pipeline.utils.rag_pipelines import get_all_evaluators, get_inmemory_store
 from relevance_pipeline.query_ai.open_ai_gpt import create_openai_answer_engine, convert_context_nodes_to_context_model
 
 logging.basicConfig(level=logging.ERROR)
@@ -14,7 +14,7 @@ load_dotenv()
 def main():
     question = "I have Third Party Fire & Theft insurance under the allianz policy. What is the most they will repay me for my car?"
 
-    store = get_gpt_inmemory_store()
+    store = get_inmemory_store('autovectorstore')
 
     context_nodes = store.retrieve_from_knowledge_store(question)
     context_model = convert_context_nodes_to_context_model(context_nodes)

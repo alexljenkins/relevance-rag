@@ -1,40 +1,38 @@
 import asyncio
 
 from fastapi import FastAPI, Query
-from llama_index.core.evaluation.base import BaseEvaluator
 
 from api.api_dataclasses import QAResponse, KnowledgeResponse, AnswerValidationResponse, EvaluationResponse, GeneratorOptionEnum
-from relevance_pipeline.utils.rag_pipelines import get_gpt_inmemory_store, get_all_evaluators
+from relevance_pipeline.utils.rag_pipelines import get_inmemory_store, get_all_evaluators
 from relevance_pipeline.query_ai.open_ai_gpt import create_openai_answer_engine, convert_context_nodes_to_context_model
-from relevance_pipeline.evaluators.evaluate import EvaluatorType
+
 
 app = FastAPI()
-BRAIN = get_gpt_inmemory_store()
-
+HIVEMIND = {
+    'vector': get_inmemory_store('autovectorstore'),
+    'bm25': get_inmemory_store('bm25')
+}
 
 @app.get("/ask", response_model=QAResponse)
-async def ask(question: str):
+async def ask(question: str, brain: str = Query('vector', enum=['vector', 'bm25'])):
     """ Answers the question given the information relevant in the knowledge store """
-    global BRAIN
-    answer = BRAIN.answer_question_with_knowledge(question)
+    answer = HIVEMIND[brain].answer_question_with_knowledge(question)
     return QAResponse(question=question, answer=str(answer))
 
 
 @app.get("/retrieve", response_model=KnowledgeResponse)
-async def retrieve(question: str):
+async def retrieve(question: str, brain: str = Query('vector', enum=['vector', 'bm25'])):
     """ Extracts relevant information from the knowledge store """
-    global BRAIN
-    context_nodes = BRAIN.retrieve_from_knowledge_store(question)
+    context_nodes = HIVEMIND[brain].retrieve_from_knowledge_store(question)
     extracted_data = convert_context_nodes_to_context_model(context_nodes)
     return KnowledgeResponse(question=question, knowledge_context=extracted_data)
 
 
 @app.get("/validate_answer", response_model=AnswerValidationResponse)
-async def validate_retrieve(question: str, generator: GeneratorOptionEnum = Query(..., description="Select a model option")):
+async def validate_retrieve(question: str, brain: str = Query('vector', enum=['vector', 'bm25']), generator: GeneratorOptionEnum = Query(..., description="Select a model option")):
     #, eval_method: EvaluatorType = Query(..., description="Select evaluation method")
     """ Extracts relevant information from the knowledge store, uses the information to answer the question and validates the answer """
-    global BRAIN
-    context_nodes = BRAIN.retrieve_from_knowledge_store(question)
+    context_nodes = HIVEMIND[brain].retrieve_from_knowledge_store(question)
     context_model = convert_context_nodes_to_context_model(context_nodes)
 
     openai_generator = create_openai_answer_engine(generator.value, temp=0.0)
