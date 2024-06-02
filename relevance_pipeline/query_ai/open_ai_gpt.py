@@ -16,8 +16,8 @@ class AnswerEngine(Generator):
 
     def answer_question_with_context(self, question: str, context: List[ContextDataModel]) -> AnswerTemplate:
         full_context = "".join([node.str_context for node in context])
-        answer = self.openai.structured_predict(AnswerTemplate, self.prompt_template, full_context=full_context, question=question)
-        return answer
+        answer = self.openai.structured_predict(AnswerTemplate, self.prompt_template, full_context=full_context, question=question) # type: ignore
+        return answer # type: ignore
 
 
 def create_openai_answer_engine(model='gpt-4o', temp=0.0) -> AnswerEngine:
